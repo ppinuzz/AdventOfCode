@@ -46,3 +46,6 @@ venv.bak/
 
 # input files for Advent of Code
 *.in
+
+*.csv
+*.xlsx
