@@ -15,11 +15,13 @@ today=$(date +"%a %b %e %H:%M:%S %Y")
 # crate year directory, if it doesn't exist already
 mkdir -p "${year}"
 python_file="${year}/D${day_number}.py"
+input_file="${year}/D${day_number}.in"
+test_file="${year}/D${day_number}_test.in"
 
 if [[ -e "${python_file}" ]]; then
 	echo "File ${python_file} already exists! Skipping creation..."
 	exit 1
-fi
+else
 	# <<EOF 	everything from EOF to the line containing EOF will be treated as 
 	# as input to cat (i.e. it will be printed to file here)
 	cat > "${python_file}" <<EOF
@@ -36,5 +38,8 @@ Created on ${today}
 filename = 'D${day_number}_test.in'
 #filename = 'D${day_number}.in'
 EOF
-	echo "Created ${python_file}"
+	echo "Created ${python_file}, ${input_file} and ${test_file}"
+	# bad trick to create new files
+	touch "${input_file}"
+	touch "${test_file}"
 fi
