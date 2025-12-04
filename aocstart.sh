@@ -1,4 +1,4 @@
-#/usr/bin/bash
+#!/usr/bin/bash
 
 # get today's day number
 # 1) date +%d	outputs day of the mont with 2 digits (e.g. 03)
