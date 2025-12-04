@@ -37,6 +37,10 @@ Created on ${today}
 
 filename = 'D${day_number}_test.in'
 #filename = 'D${day_number}.in'
+
+with open(filename, 'r') as file:
+	# remove trailing '\n' automatically
+    data = file.read().splitlines()
 EOF
 	echo "Created ${python_file}, ${input_file} and ${test_file}"
 	# bad trick to create new files
