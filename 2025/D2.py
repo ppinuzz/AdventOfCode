@@ -11,6 +11,7 @@ Created on Tue Dec  2 09:39:38 2025
 import numpy as np
 from sympy import divisors
 from re import findall
+from timeit import default_timer as timer
 
 #filename = 'D2_test.in'
 filename = 'D2.in'
@@ -54,6 +55,8 @@ print(f'Sum of invalid IDs: {sum_invalid}')
 
 #%% PUZZLE 2
 
+start_time = timer()
+
 all_invalid_ID = []
 for range_i in ranges:
     # list of IDs in between the 2 limits
@@ -78,3 +81,7 @@ for range_i in ranges:
 
 sum_invalid = np.sum(np.array(list(map(int, all_invalid_ID))))
 print(f'Sum of invalid IDs: {sum_invalid}')
+
+end_time = timer()
+elapsed_time = end_time - start_time
+print(f'Elapsed time: {elapsed_time:.2f} s')
