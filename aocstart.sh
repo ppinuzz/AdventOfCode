@@ -35,12 +35,22 @@ Created on ${today}
 @author: Andrea Pinardi <andreapinardi319@gmail.com>
 """
 
+from timeit import default_timer as timer
+
 filename = 'D${day_number}_test.in'
 #filename = 'D${day_number}.in'
 
 with open(filename, 'r') as file:
 	# remove trailing '\n' automatically
     data = file.read().splitlines()
+
+start_time = timer()
+
+# code...
+
+end_time = timer()
+elapsed_time = end_time - start_time
+print(f'Elapsed time: {elapsed_time:.2f} s')
 EOF
 	echo "Created ${python_file}, ${input_file} and ${test_file}"
 	# bad trick to create new files
