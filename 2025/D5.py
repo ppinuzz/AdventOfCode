@@ -11,8 +11,8 @@ Created on Fri Dec  5 09:03:34 2025
 from timeit import default_timer as timer
 import numpy as np
 
-filename = 'D5_test.in'
-#filename = 'D5.in'
+#filename = 'D5_test.in'
+filename = 'D5.in'
 
 with open(filename, 'r') as file:
 	# remove trailing '\n' automatically
@@ -47,17 +47,11 @@ print(f'Number of safe items: {N_good}')
 
 #%% PUZZLE 2
 
-good_IDs.append([3, 7])
-good_IDs.append([4, 8])
-good_IDs.append([4, 6])
-good_IDs.append([5, 9])
-
 good_IDs = np.array(good_IDs)
-MAX = np.max(good_IDs)
 # sentinel value
-SENT = MAX + 1
+SENT = np.max(good_IDs) + 1
 ranges_safe = []
-range_i = None
+# repeat until all the values have been "deleted" (i.e. set to SENT)
 while np.sum(good_IDs == SENT) < good_IDs.size:
     # 1st value is the minimum of the possible 1st points (i.e. 1st column)
     ID_1 = np.min(good_IDs[:,0])
@@ -68,39 +62,36 @@ while np.sum(good_IDs == SENT) < good_IDs.size:
     idx_highest_1 = np.argwhere(good_IDs[:,1] == max_dx)[0][0]
     # ... and then select its right limit
     ID_2 = good_IDs[idx_highest_1,1]
-    if range_i is not None and ID_1 > range_i[1]:
-        ranges_safe.append(range_i)
-    if range_i is not None:
-        if ID_1 < range_i[1] and ID_2 > range_i[1]:
-            range_i[1] = ID_2
-        else:
-            range_i = [ID_1, ID_2]
-    else:
-        range_i = [ID_1, ID_2]
+    range_i = [ID_1, ID_2]
     # "remove" all the values you've either used to create the range, or discarded
     # (e.g. if you have more ranges with the same left limit, only the range with 
     # the highest right limit is useful; all the others are included in it)
     good_IDs[idx_1,:] = SENT
     
+    # now that you gave a range, look for all the ranges which are either 
+    # contained with this one, or are overlapping with it
     
     
-    # now the biggest valid ID is range_i[1] and all the values below it are:
-    #   - useless if they appear in the 2nd column: if all the values in between
-    #   ID_1 and ID_2 are safe, all the intervals ending in something < ID_2 are
-    # already included => remove those lines entirely
+    # is there are values in the 2nd column < range_i[1], they're useless
+    # because they close an interval which lies entirely in the current one
+    # => delete them
     good_IDs[good_IDs[:,1]<=range_i[1], :] = SENT
     
     # check among those having left <= range_i[2]: choose the one with the biggest
     # right value => overlapping ranges => expand the range
     idx_smaller_1 = np.squeeze(np.argwhere(good_IDs[:,0] <= range_i[1]))
-    if idx_smaller_1.size > 0:
+    while idx_smaller_1.size > 0:
         # and choose the one with the highest right value
         max_dx = np.max(good_IDs[idx_smaller_1,1])
         idx_smaller_highest_1 = np.squeeze(np.argwhere(good_IDs[:,1] == max_dx))
         # once you have it, substitute the 2md range element
         range_i[1] = max_dx
         good_IDs[idx_smaller_1,:] = SENT
-ranges_safe.append(range_i)
+        idx_smaller_1 = np.squeeze(np.argwhere(good_IDs[:,0] <= range_i[1]))
+    
+    # if there are no more overlapping ranges, then this range is separated
+    # from the next one => save it and move to the next iteration
+    ranges_safe.append(range_i)
 
 ranges_safe = np.array(ranges_safe)
 N = np.sum(np.diff(ranges_safe) + 1)
