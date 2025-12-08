@@ -21,6 +21,8 @@ with open(filename, 'r') as file:
     # only the 1st line 'myline'
     data = file.readline()
 
+start_time = timer()
+
 ranges = data.split(',')
 # split each string '11-22' to ['11', '22'], the apply int() to convert
 ranges = [list(map(int, range_i.split('-'))) for range_i in ranges]
@@ -54,8 +56,6 @@ print(f'Sum of invalid IDs: {sum_invalid}')
 
 
 #%% PUZZLE 2
-
-start_time = timer()
 
 all_invalid_ID = []
 for range_i in ranges:

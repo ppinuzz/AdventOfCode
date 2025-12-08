@@ -9,12 +9,15 @@ Created on Wed Dec  3 09:51:52 2025
 """
 
 import numpy as np
+from timeit import default_timer as timer
 
 #filename = 'D3_test.in'
 filename = 'D3.in'
 
 with open(filename, 'r') as file:
     data = file.readlines()
+
+start_time = timer()
 
 banks = []
 for bank in data:
@@ -88,4 +91,6 @@ tot_jolt = np.sum(jolts)
 
 print(f'Total joltage output: {tot_jolt}')
 
-# 3121910778619 => too low
+end_time = timer()
+elapsed_time = end_time - start_time
+print(f'Elapsed time: {elapsed_time:.2f} s')

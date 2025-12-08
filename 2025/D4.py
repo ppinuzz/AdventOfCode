@@ -8,11 +8,15 @@ Created on Thu Dec  4 09:12:16 2025
 @author: Andrea Pinardi <andreapinardi319@gmail.com>
 """
 
+from timeit import default_timer as timer
+
 #filename = 'D4_test.in'
 filename = 'D4.in'
 
 with open(filename, 'r') as file:
     data = file.read().splitlines()
+
+start_time = timer()
 
 
 #%% PUZZLE 1
@@ -92,3 +96,7 @@ while True:
         data_temp[i] = data_temp[i][0:j] + '.' + data_temp[i][j+1:]
 
 print(f'Rolls of paper removed: {roll_removed}')
+
+end_time = timer()
+elapsed_time = end_time - start_time
+print(f'Elapsed time: {elapsed_time:.2f} s')

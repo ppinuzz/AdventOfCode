@@ -8,6 +8,7 @@ Created on Mon Dec  1 09:20:22 2025
 @author: Andrea Pinardi <andreapinardi319@gmail.com>
 """
 
+from timeit import default_timer as timer
 import numpy as np
 
 #filename = 'D1_test.in'
@@ -22,6 +23,8 @@ with open(filename, 'r') as file:
         moves.append(int(line)) 
 
 moves = np.array(moves) 
+
+start_time = timer()
 
 # dial starts at position 50 from text 
 dial = 50
@@ -93,6 +96,6 @@ N_zeros = N_zeros + password
 print(f'Password 1: {password}') 
 print(f'Password 2: {N_zeros}') 
 
-# 6126 => no
-# 6216 => no
-# 2625 => no
+end_time = timer()
+elapsed_time = end_time - start_time
+print(f'Elapsed time: {elapsed_time:.2f} s')
