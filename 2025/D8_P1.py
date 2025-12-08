@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Advent of Code 2025 - Day 8
+Advent of Code 2025 - Day 8, part 1
 
 Created on Mon Dec  8 14:57:16 2025
 
