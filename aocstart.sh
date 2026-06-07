@@ -90,7 +90,7 @@ start_time = timer()
 
 end_time = timer()
 elapsed_time = end_time - start_time
-print(f'Elapsed time: {elapsed_time:.2f} s')
+print(f'Elapsed time: {elapsed_time:.3f} s')
 EOF
 	echo "Created ${python_file}, ${input_file} and ${test_file}"
 	# bad trick to create new files
