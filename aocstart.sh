@@ -2,6 +2,7 @@
 
 # check whether the user has provided a -y or --year argument
 year=""
+day=""
 # repeat until the number of positional arguments passed to the shell ($#) is > 0
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -10,6 +11,10 @@ while [[ $# -gt 0 ]]; do
 			# once you have the value, remove the flag -y and the year number (i.e. shifts the argument list of 2 positions)
             shift 2
             ;;
+		-d|--day)
+			day="$2"
+			shift 2
+			;;
 		-h|--help)
 			# to ensure proper formatting and alignment, use a heredoc with <<EOF (see below)
             cat<<EOF
@@ -17,6 +22,7 @@ Usage: aocstart.sh [options]
 
 Options:
 	-y, --year	specify the year folder (default: current year)
+	-d, --day 	specify the day (default: current date)
 	-h, --help	print this string
 EOF
             exit 0
@@ -28,26 +34,29 @@ EOF
     esac
 done
 
-# get today's day number
-# 1) date +%d	outputs day of the mont with 2 digits (e.g. 03)
-# 2) pass to sed to remove leading 0, if present
-# 3) s/.../.../ = "substitute what's in 1st /.../ with what's in 2nd /.../"
-#	^	start of the line
-#	0*	any number of 0s
-#	since the 2nd /.../ is empty, this replaces all the leading 0s with nothing
-day_number=$(date +%d | sed 's/^0*//')
+
 # if user didn't specify -y (and thus 'year' has length 0), use current year
 if [[ -z "$year" ]]; then
     year=$(date +%Y)
+fi
+if [[ -z "$day" ]]; then
+	# get today's day number
+	# 1) date +%d	outputs day of the mont with 2 digits (e.g. 03)
+	# 2) pass to sed to remove leading 0, if present
+	# 3) s/.../.../ = "substitute what's in 1st /.../ with what's in 2nd /.../"
+	#	^	start of the line
+	#	0*	any number of 0s
+	#	since the 2nd /.../ is empty, this replaces all the leading 0s with nothing
+	day=$(date +%d | sed 's/^0*//')
 fi
 # full date string like 'Mon Dec  1 09:20:22 2025'
 today=$(date +"%a %b %e %H:%M:%S %Y")
 
 # crate year directory, if it doesn't exist already
 mkdir -p "${year}"
-python_file="${year}/D${day_number}.py"
-input_file="${year}/D${day_number}.in"
-test_file="${year}/D${day_number}_test.in"
+python_file="${year}/D${day}.py"
+input_file="${year}/D${day}.in"
+test_file="${year}/D${day}_test.in"
 
 if [[ -e "${python_file}" ]]; then
 	echo "File ${python_file} already exists! Skipping creation..."
@@ -59,7 +68,7 @@ else
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Advent of Code {year} - Day ${day_number}
+Advent of Code ${year} - Day ${day}
 
 Created on ${today}
 
@@ -68,8 +77,8 @@ Created on ${today}
 
 from timeit import default_timer as timer
 
-filename = 'D${day_number}_test.in'
-#filename = 'D${day_number}.in'
+filename = 'D${day}_test.in'
+#filename = 'D${day}.in'
 
 with open(filename, 'r') as file:
 	# remove trailing '\n' automatically
